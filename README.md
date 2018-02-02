@@ -6,32 +6,41 @@ vba [--no-color] <command> [additional command options...] [where <key> <operato
 
 ## Available commands
 
-`status`: 
-    Prints the status of all registered Vagrants
+`status`
 
-`refresh [--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]`: 
-    Reloads Vagrant configuration for existing Vagrants
+Prints the status of all registered Vagrants
 
-`add-missing [--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]`:
-    Adds unregistered Vagrantfiles found in the working directory
+`refresh [--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]`
 
-`ssh [-q|--no-summary] [-s|--sequential] [--shell=/bin/sh] [-i|--interactive]`: 
-    Remotely executes commands specified by stdin on each running Vagrant*
+Reloads Vagrant configuration for existing Vagrants
 
-`exec [-q|--no-summary] [-s|--sequential]`: 
-    Locally executes commands specified by stdin for each Vagrant*
+`add-missing [--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]`
 
-`list-[ids|directories|names]`: 
-    Lists all ids/directories/names
+Adds unregistered Vagrantfiles found in the working directory
 
-`halt|provision|resume|suspend|reload [-q|--no-summary] [-s|--sequential] [Vagrant args...]`: 
-    These Vagrant commands are run on all running Vagrants*
+`ssh [-q|--no-summary] [-s|--sequential] [--shell=/bin/sh] [-i|--interactive]`
 
-`up [-q|--no-summary] [-s|--sequential] [Vagrant args...]`: 
-    These Vagrant commands are run on all stopped Vagrants*
+Remotely executes commands specified by stdin on each running Vagrant*
 
-`help`:
-    Prints this help text
+`exec [-q|--no-summary] [-s|--sequential]`
+
+Locally executes commands specified by stdin for each Vagrant*
+
+`list-[ids|directories|names]`
+
+Lists all ids/directories/names
+
+`halt|provision|resume|suspend|reload [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
+
+These Vagrant commands are run on all running Vagrants*
+
+`up [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
+
+These Vagrant commands are run on all stopped Vagrants*
+
+`help`
+
+Prints this help text
 
 **NOTE**: Commands are only performed on Vagrants:
 1) whose Vagrantfiles reside anywhere under the current working directory,
@@ -46,14 +55,18 @@ Available keys:
 
 Available operators:
 
-`is [-i|--insensitive] <value>`:
-    Matches a string value exactly (with optional case insensitivity)
+`is [-i|--insensitive] <value>`
 
-`isnt [-i|--insensitive] <value>`:
-    Inverse of 'is'
+Matches a string value exactly (with optional case insensitivity)
 
-`matches [-r|--regex] [-i|--insensitive] <glob/regex pattern>`:
-    Matches a glob (or optionally regex) value (with optional case insensitivity)
+`isnt [-i|--insensitive] <value>`
 
-`doesntmatch [-r|--regex] [-i|--insensitive] <glob/regex pattern>`:
-    Inverse of 'matches'
+Inverse of 'is'
+
+`matches [-r|--regex] [-i|--insensitive] <glob/regex pattern>`
+
+Matches a glob (or optionally regex) value (with optional case insensitivity)
+
+`doesntmatch [-r|--regex] [-i|--insensitive] <glob/regex pattern>`
+
+Inverse of 'matches'
