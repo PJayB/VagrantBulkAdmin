@@ -846,13 +846,26 @@ def usage(exitCode):
         printer.styleText(whereStyle, '%s ' % c[0]).styleText(usageStyle, c[1]).eol()
         printer.text('    %s' % c[2]).eol()
 
+    printer.eol().styleText(noteStyle + printer.bold, "NOTE:")
+    printer.push(noteStyle).text(" simply using a name pattern instead of ").styleText(whereStyle, 'where').text(" is a shorthand for '").styleText(whereStyle, 'where name matches <pattern>').text("'.").eol()
+    printer.push(noteStyle).text("For example, to bring up all boxes matching 'ubuntu*64':").eol().eol()
+    printer.styleText(usageStyle, "    %s " % os.path.basename(sys.argv[0]))
+    printer.styleText(commandStyle, "up")
+    printer.text(" ")
+    printer.styleText(whereStyle, "ubuntu*64")
+    printer.eol().eol()
+
     # TODO: explain where keys and conditions
     # TODO: explain --no-summary
     # TODO: explain --sequential
     # TODO: explain exec usage and environment variables
     sys.exit(exitCode)
 
-# -------------------------------------------------------------f----------------
+# -----------------------------------------------------------------------------
+def usage_error(e):
+    fatal(e)
+
+# -----------------------------------------------------------------------------
 #
 # Now the real work begins...
 #
@@ -882,7 +895,7 @@ if argCur == len(sys.argv):
 
 command = sys.argv[argCur]
 if command == '':
-    usage(1)
+    usage_error("Command cannot be empty string")
 
 class Options:
     case_sensitive = True,
@@ -902,23 +915,29 @@ condition_switches = {
 
 argCur = argCur + 1
 endArgCur = argCur
-while endArgCur < len(sys.argv) and not next_arg_is(endArgCur, "where"):
-    if not next_arg_is_switch(endArgCur):
-        print("Unknown option %s" % get_arg(endArgCur, "option"))
-        usage(1)
+while endArgCur < len(sys.argv) and next_arg_is_switch(endArgCur):
     endArgCur = endArgCur + 1
 
 commandArgs = sys.argv[argCur:endArgCur]
 
+# Determine whether or not we have a single or fully-qualified criteria
+if len(sys.argv) == endArgCur + 1:
+    # Simple 'where name matches' shorthand criteria
+    c = Condition()
+    c.key = "name"
+    c.condition = conditionFuncs["matches"]
+    c.value = get_arg(endArgCur, 'pattern')
+    c.case_sensitive = True
+    global_conditions.append(c)
+
 # Determine what criteria we should be assessing
 # Can compare to any field in a vagrant's status
-# ==, !=, regex
-# Chain together with 'and' or 'or'
-if len(sys.argv) > endArgCur + 3:
+# Chain together with 'and' ('or' must be done with separate invocations)
+elif len(sys.argv) > endArgCur + 3:
     if sys.argv[endArgCur] != 'where':
-        usage(1)
+        usage_error("Expected 'where'")
     if len(sys.argv) < endArgCur + 3:
-        usage(1)
+        usage_error("Expected 'where' clauses")
 
     # Read the next three in the form "x is/isnt/matches/nomatches y"
     cur = endArgCur + 1
@@ -936,8 +955,7 @@ if len(sys.argv) > endArgCur + 3:
         value = sys.argv[cur + 2]
 
         if not condition in conditionFuncs:
-            print("Unknown condition %s" % condition)
-            usage(1)
+            usage_error("Unknown condition %s" % condition)
 
         c = Condition()
         c.key = key
@@ -974,11 +992,11 @@ listKeys = {
 # Execute the requested command
 if command == "status":
     if len(commandArgs) > 0:
-        usage(1)
+        usage_error("Unexpected: %s" % commandArgs[0])
     status()
 elif command == "help":
     if len(commandArgs) > 0:
-        usage(1)
+        usage_error("Unexpected: %s" % commandArgs[0])
     usage(0)
 elif command == "refresh":
     refresh_existing(commandArgs)
@@ -992,7 +1010,7 @@ elif command == "destroy":
     fatal("'destroy' not supported through this interface (yet). Use 'echo \"vagrant destroy\" | %s exec' instead." % os.path.basename(sys.argv[0]))
 elif command in listKeys:
     if len(commandArgs) > 0:
-        usage(1)
+        usage_error("Unexpected: %s" % commandArgs[0])
     list_vagrants(listKeys[command])
 elif command in massRunningVagrantCommands:
     for_each_running_vagrant(command, commandArgs)
