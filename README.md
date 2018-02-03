@@ -80,3 +80,13 @@ Available operators:
 For example, to bring up all boxes matching 'ubuntu*64':
 
     vba up ubuntu*64
+
+
+# TODO
+- explain where keys and conditions
+- explain `--no-summary`
+- explain `--sequential`
+- explain piping to `exec` and `ssh`
+- explain exec usage and environment variables
+- explain SSH environment variables
+- explain SSH `-i` (and environment variables)

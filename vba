@@ -806,7 +806,13 @@ def usage(exitCode):
     printer.text(" <key> <operator> <value> [")
     printer.styleText(whereStyle, "and")
     printer.text(" <key2> <operator2> <value2>...]]").eol().eol()
-    printer.text("Available ").styleText(commandStyle, "commands").text(":").eol()
+    printer.text("or,").eol()
+    printer.styleText(usageStyle, "    %s" % os.path.basename(sys.argv[0]))
+    printer.text(" [--no-color] ")
+    printer.styleText(commandStyle, "<command>")
+    printer.text(" [additional command options...] [")
+    printer.styleText(whereStyle, "<name pattern>").text(']').eol().eol()
+    
     commands = []
     commands.append(['status', '', 'Prints the status of all registered Vagrants'])
     commands.append(['refresh', '[--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]', 'Reloads Vagrant configuration for existing Vagrants'])
