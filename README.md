@@ -48,7 +48,7 @@ or,
 
 **NOTE**: Commands are only performed on Vagrants:
 1) whose Vagrantfiles reside anywhere under the current working directory,
-2) and matching the critera specified by 'where'.
+2) and matching the critera specified by `where`.
 
 **NOTE**: Commands marked with a * are run in parallel by default. Use `--sequential` to force sequential execution.
 
@@ -56,7 +56,7 @@ or,
 
 Available keys:
 
-> `id, name, provider, state, directory`
+> `id`, `name`, `provider`, `state`, `directory`
 
 Available operators:
 
