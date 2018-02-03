@@ -1,46 +1,50 @@
 # Usage
 
-```
-vba [--no-color] <command> [additional command options...] [where <key> <operator> <value> [and <key2> <operator2> <value2>...]]
-```
+    vba [--no-color] <command> [additional command options...] [where <key> <operator> <value> [and <key2> <operator2> <value2>...]]
+
+or,
+
+    vba [--no-color] <command> [additional command options...] <name pattern>
 
 ## Available commands
 
-`status`
+> `status`
+> 
+> Prints the status of all registered Vagrants
 
-Prints the status of all registered Vagrants
+> `refresh [--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]`
+> 
+> Reloads Vagrant configuration for existing Vagrants
 
-`refresh [--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]`
+> `add-missing [--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]`
+> 
+> Adds unregistered Vagrantfiles found in the working directory
 
-Reloads Vagrant configuration for existing Vagrants
+> `ssh [-q|--no-summary] [-s|--sequential] [--shell=/bin/sh] [-i|--interactive]`
+> 
+> Remotely executes commands specified by stdin on each running Vagrant*
 
-`add-missing [--(no-provision)] [--(no-)destroy-on-error] [-y|--unattended]`
+> `exec [-q|--no-summary] [-s|--sequential]`
+> 
+> Locally executes commands specified by stdin for each Vagrant*
 
-Adds unregistered Vagrantfiles found in the working directory
+> `list-[ids|directories|names]`
+> 
+> Lists all ids/directories/names
 
-`ssh [-q|--no-summary] [-s|--sequential] [--shell=/bin/sh] [-i|--interactive]`
+> `halt|provision|resume|suspend|reload [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
+> 
+> These Vagrant commands are run on all running Vagrants*
 
-Remotely executes commands specified by stdin on each running Vagrant*
+> `up [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
+> 
+> These Vagrant commands are run on all stopped Vagrants*
 
-`exec [-q|--no-summary] [-s|--sequential]`
+> `help`
+> 
+> Prints this help text
 
-Locally executes commands specified by stdin for each Vagrant*
-
-`list-[ids|directories|names]`
-
-Lists all ids/directories/names
-
-`halt|provision|resume|suspend|reload [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
-
-These Vagrant commands are run on all running Vagrants*
-
-`up [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
-
-These Vagrant commands are run on all stopped Vagrants*
-
-`help`
-
-Prints this help text
+**NOTE**: If no command is specified, the default is `status`.
 
 **NOTE**: Commands are only performed on Vagrants:
 1) whose Vagrantfiles reside anywhere under the current working directory,
@@ -51,22 +55,28 @@ Prints this help text
 ## `where` usage
 
 Available keys:
-`    id, name, provider, state, directory`
+
+> `id, name, provider, state, directory`
 
 Available operators:
 
-`is [-i|--insensitive] <value>`
+> `is [-i|--insensitive] <value>`
+> 
+> Matches a string value exactly (with optional case insensitivity)
 
-Matches a string value exactly (with optional case insensitivity)
+> `isnt [-i|--insensitive] <value>`
+> 
+> Inverse of 'is'
 
-`isnt [-i|--insensitive] <value>`
+> `matches [-r|--regex] [-i|--insensitive] <glob/regex pattern>`
+> 
+> Matches a glob (or optionally regex) value (with optional case insensitivity)
 
-Inverse of 'is'
+> `doesntmatch [-r|--regex] [-i|--insensitive] <glob/regex pattern>`
+> 
+> Inverse of 'matches'
 
-`matches [-r|--regex] [-i|--insensitive] <glob/regex pattern>`
+**NOTE**: simply using a name pattern instead of `where` is a shorthand for `where name matches <pattern>`.
+For example, to bring up all boxes matching 'ubuntu*64':
 
-Matches a glob (or optionally regex) value (with optional case insensitivity)
-
-`doesntmatch [-r|--regex] [-i|--insensitive] <glob/regex pattern>`
-
-Inverse of 'matches'
+    vba up ubuntu*64
