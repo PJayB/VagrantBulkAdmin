@@ -9,6 +9,8 @@ import sys
 import re
 import os
 
+# -----------------------------------------------------------------------------
+
 class Condition:
     key = ''
     condition = None
@@ -64,6 +66,7 @@ conditionFuncs = {
     "doesntmatch": condition_nomatch_glob,
 }
 
+all_vagrants = False
 global_conditions = []
 
 # -----------------------------------------------------------------------------
@@ -338,7 +341,9 @@ def get_all_registered_vagrants(key = 'id', conditions = []):
         fatal(err)
 
     # Get the vagrant boxes directory
-    boxesPath = get_boxes_path()
+    boxesPath = ''
+    if not all_vagrants:
+        boxesPath = get_boxes_path()
 
     # Ensure vagrant hasn't changed underneath us
     vagrantRecords = vagrantStatus.split('\n')
@@ -510,6 +515,10 @@ def register_missing(args):
 
     oldCWD = os.getcwd()
     failures = []
+
+    # "--global" isn't compatible here
+    if all_vagrants:
+        fatal("--global is not valid with add-missing")
 
     # Find Vagrant files 
     boxesPath = get_boxes_path()
@@ -881,8 +890,7 @@ def usage_error(e):
 
 # Default to 'status' if no arguments are provided
 if len(sys.argv) < 2:
-    status()
-    sys.exit(0)
+    usage(1)
 
 # Get any switches
 argCur = 1
@@ -891,6 +899,8 @@ while argCur < len(sys.argv) and next_arg_is_switch(argCur):
     a = get_arg(argCur, "option")
     if a == "--no-color":
         printer.enable_color = False
+    elif a == "-g" or a == "--global":
+        all_vagrants = True
     elif a == "--help":
         go_to_help = True
     else:

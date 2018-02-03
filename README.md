@@ -1,10 +1,10 @@
 # Usage
 
-    vba [--no-color] <command> [additional command options...] [where <key> <operator> <value> [and <key2> <operator2> <value2>...]]
+    vba [--no-color] [--global] <command> [additional command options...] [where <key> <operator> <value> [and <key2> <operator2> <value2>...]]
 
 or,
 
-    vba [--no-color] <command> [additional command options...] <name pattern>
+    vba [--no-color] [--global] <command> [additional command options...] <name pattern>
 
 ## Available commands
 
@@ -44,10 +44,8 @@ or,
 > 
 > Prints this help text
 
-**NOTE**: If no command is specified, the default is `status`.
-
 **NOTE**: Commands are only performed on Vagrants:
-1) whose Vagrantfiles reside anywhere under the current working directory,
+1) whose Vagrantfiles reside anywhere under the current working directory, unless `--global` is specified,
 2) and matching the critera specified by `where`.
 
 **NOTE**: Commands marked with a * are run in parallel by default. Use `--sequential` to force sequential execution.
@@ -83,6 +81,8 @@ For example, to bring up all boxes matching 'ubuntu*64':
 
 
 # TODO
+- explain `--no-color`
+- explain `--global`
 - explain where keys and conditions
 - explain `--no-summary`
 - explain asynchrony and `--sequential`
