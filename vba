@@ -870,9 +870,10 @@ def usage_error(e):
 # Now the real work begins...
 #
 
-# Validate command line
+# Default to 'status' if no arguments are provided
 if len(sys.argv) < 2:
-    usage(1)
+    status()
+    sys.exit(0)
 
 # Get any switches
 argCur = 1
