@@ -822,6 +822,9 @@ def usage(exitCode):
         printer.text('    %s' % c[2]).eol()
 
     printer.eol().styleText(noteStyle + printer.bold, "NOTE:")
+    printer.push(noteStyle).text(" If no command is specified, the default is ").styleText(commandStyle, "status").text(".").eol().eol()
+
+    printer.styleText(noteStyle + printer.bold, "NOTE:")
     printer.push(noteStyle).text(" Commands are only performed on Vagrants:\n    1) whose Vagrantfiles reside anywhere under the current working directory,\n    2) and matching the critera specified by '").styleText(whereStyle, 'where').text("'.").eol().eol()
 
     printer.styleText(noteStyle + printer.bold, "NOTE:")
