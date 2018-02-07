@@ -615,7 +615,7 @@ def vagrant_batch_finalize(vagrants, results, summary_fields=vagrant_batch_defau
                 summary.append(record)
             print_table(summary, summary_fields)
         else:
-            print("No results.")
+            fatal("There are no Vagrants matching the specified criteria")
 
     # Exit with an appropriate code
     for r in results.itervalues():
@@ -647,17 +647,11 @@ def for_each_vagrant(command, switches):
     vagrant_batch_operation(vagrants, command, switches)
 
 # -----------------------------------------------------------------------------
-# For each registered *running* vagrant, do a thing
-
-def for_each_running_vagrant(command, switches):
-    vagrants = get_running_vagrants()
-    vagrant_batch_operation(vagrants, command, switches)
-
-# -----------------------------------------------------------------------------
-# For each registered *not running* vagrant, do a thing
-
-def for_each_not_running_vagrant(command, switches):
-    vagrants = get_registered_vagrants(key='directory', additional_conditions = [ create_condition('state', condition_notequal, 'running') ])
+# For each registered vagrant in one of the specified states, do a thing
+def for_each_vagrant_in_states(command, switches, states):
+    vagrants = []
+    for state in states:
+        vagrants += get_registered_vagrants(key='directory', additional_conditions = [ create_condition('state', condition_equal, state) ])
     vagrant_batch_operation(vagrants, command, switches, key='directory', summary_fields=['directory', 'returncode'])
 
 # -----------------------------------------------------------------------------
@@ -999,8 +993,16 @@ elif len(sys.argv) > endArgCur + 3:
         if cur < len(sys.argv) and sys.argv[cur] == "and":
             cur += 1
 
-massRunningVagrantCommands = ["halt", "provision", "resume", "suspend", "reload"]
-massHaltedVagrantCommands = ["up"]
+# These commands are only valid for VMs in the corresponding states
+vagrantCommands = {
+    'halt': ['running', 'saved'],
+    'provision': ['running', 'saved', 'poweroff'],
+    'resume': ['saved'],
+    'suspend': ['running'],
+    'reload': ['poweroff', 'saved', 'running'],
+    'snapshot': ['poweroff', 'saved', 'running'],
+    'up': ['poweroff', 'saved']
+}
 
 listKeys = {
     "list-ids": "id",
@@ -1032,9 +1034,7 @@ elif command in listKeys:
     if len(commandArgs) > 0:
         usage_error("Unexpected: %s" % commandArgs[0])
     list_vagrants(listKeys[command])
-elif command in massRunningVagrantCommands:
-    for_each_running_vagrant(command, commandArgs)
-elif command in massHaltedVagrantCommands:
-    for_each_not_running_vagrant(command, commandArgs)
+elif command in vagrantCommands:
+    for_each_vagrant_in_states(command, commandArgs, vagrantCommands[command])
 else:
     fatal("Not sure how to '%s'" % command)

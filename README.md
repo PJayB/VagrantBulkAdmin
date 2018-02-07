@@ -32,13 +32,9 @@ or,
 > 
 > Lists all ids/directories/names
 
-> `halt|provision|resume|suspend|reload [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
+> `halt|provision|resume|suspend|reload|snapshot|up [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
 > 
-> These Vagrant commands are run on all running Vagrants*
-
-> `up [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
-> 
-> These Vagrant commands are run on all stopped Vagrants*
+> These Vagrant commands are forwarded to all Vagrants* in applicable states. e.g. `vba halt` only applies to Vagrants in the `running` and `saved` states.
 
 > `help`
 > 
