@@ -34,7 +34,7 @@ or,
 
 > `halt|provision|resume|suspend|reload|snapshot|up [-q|--no-summary] [-s|--sequential] [Vagrant args...]`
 > 
-> These Vagrant commands are forwarded to all Vagrants* in applicable states. e.g. `vba halt` only applies to Vagrants in the `running` and `saved` states.
+> These Vagrant commands are forwarded to all Vagrants* in applicable states.
 
 > `help`
 > 
@@ -42,7 +42,8 @@ or,
 
 **NOTE**: Commands are only performed on Vagrants:
 1) whose Vagrantfiles reside anywhere under the current working directory, unless `--global` is specified,
-2) and matching the critera specified by `where`.
+2) whose state is applicable to the specified command, e.g. `vba halt` only applies to Vagrants in the `running` and `saved` states,
+3) and matching the critera specified by `where`.
 
 **NOTE**: Commands marked with a * are run in parallel by default. Use `--sequential` to force sequential execution.
 
