@@ -649,9 +649,9 @@ def for_each_vagrant(command, switches):
 # -----------------------------------------------------------------------------
 # For each registered vagrant in one of the specified states, do a thing
 def for_each_vagrant_in_states(command, switches, states):
-    vagrants = []
+    vagrants = {}
     for state in states:
-        vagrants += get_registered_vagrants(key='directory', additional_conditions = [ create_condition('state', condition_equal, state) ])
+        vagrants.update(get_registered_vagrants(key='directory', additional_conditions = [ create_condition('state', condition_equal, state) ]))
     vagrant_batch_operation(vagrants, command, switches, key='directory', summary_fields=['directory', 'returncode'])
 
 # -----------------------------------------------------------------------------
