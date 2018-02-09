@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import subprocess
 import tempfile
-import argparse
 import fnmatch
 import json
 import stat
