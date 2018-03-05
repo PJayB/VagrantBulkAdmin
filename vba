@@ -362,7 +362,7 @@ def get_all_registered_vagrants(key = 'id', conditions = []):
     vagrants = {}
 
     # Tokenize the string by newline so we can weed out what we don't want
-    vagrantRegex = re.compile(r"^([0-9a-f]{7}).*(%s[^\\?%%:|\"<> ]+)" % boxesPath)
+    vagrantRegex = re.compile(r"^([0-9a-f]{7}).*(%s[^\\?%%:|\"<> ]*)" % boxesPath)
     for vr in vagrantRecords:
         if vagrantRegex.match(vr):
             tokens = vr.split()
